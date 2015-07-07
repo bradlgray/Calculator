@@ -9,17 +9,80 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    
+    @IBOutlet weak var showNumber: UILabel!
+    
+    
+    var userIsInTheMiddleOfTypingNumber = false
+     var operandStack = Array<Double>()
+    
+    var displayValue: Double {
+        get {
+            return NSNumberFormatter().numberFromString(showNumber.text!)!.doubleValue
+            
+        }
+        set {
+            showNumber.text = "\(newValue)"
+            userIsInTheMiddleOfTypingNumber = false
+            
+        }
+    }
+    
+    @IBAction func operate(sender: UIButton) {
+        let operation = sender.currentTitle!
+        if userIsInTheMiddleOfTypingNumber {
+            enter()
+        }
+        switch operation {
+        
+            case "×":
+                if operandStack.count >= 2 {
+                displayValue = operandStack.removeLast() * operandStack.removeLast()
+                    enter()
+                }
+           
+            
+//        case: "÷":
+//        case: "+" :
+//        case: "−" :
+        default: break
+        }
+        
+       
+    }
+    
+    
+    
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+@IBAction func touchButton(sender: UIButton) {
+   let digit = sender.currentTitle!
+  showNumber.text = showNumber.text! + digit
+    
+    if userIsInTheMiddleOfTypingNumber {
+        showNumber.text = showNumber.text! + digit
+        
+    }else {
+        showNumber.text = digit
+        userIsInTheMiddleOfTypingNumber = true
+    }
+    
+    }
+    
+    
+    @IBAction func enter() {
+        userIsInTheMiddleOfTypingNumber = false
+        operandStack.append(displayValue)
+        println("operandStack = \(operandStack)")
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func performOperation (operation: Double, Double) -> Double {
+        if operandStack.count >= 2 {
+            displayValue = operandStack.removeLast() * operandStack.removeLast()
+            enter()
+        }
     }
-
-
+    
 }
+
 
