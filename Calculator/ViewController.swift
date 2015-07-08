@@ -37,21 +37,27 @@ class ViewController: UIViewController {
         switch operation {
         
             case "×":
-                if operandStack.count >= 2 {
-                displayValue = operandStack.removeLast() * operandStack.removeLast()
-                    enter()
-                }
-           
+                performOperation { $0 * $1 }
+
             
-//        case: "÷":
-//        case: "+" :
-//        case: "−" :
+            case "÷":
+                performOperation { $1 / $0}
+        
+
+            case "+":
+            performOperation { $0 + $1 }
+
+            case "−":
+            performOperation { $1 - $0 }
+            
+        case "√": squareroot { sqrt($0) }
+            
+
         default: break
         }
         
        
     }
-    
     
     
 
@@ -76,13 +82,18 @@ class ViewController: UIViewController {
         println("operandStack = \(operandStack)")
     }
 
-    func performOperation (operation: Double, Double) -> Double {
+    func performOperation (operation: (Double, Double) -> Double) {
         if operandStack.count >= 2 {
-            displayValue = operandStack.removeLast() * operandStack.removeLast()
+            displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
             enter()
         }
     }
-    
+    func squareroot (operation: (Double) ->Double) {
+         if operandStack.count >= 2 {
+       displayValue = operation(operandStack.removeLast())
+            enter()
+        }
+    }
 }
 
 
